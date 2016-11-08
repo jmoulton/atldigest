@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import MartaContainer from './Marta';
+import WeatherContainer from './Weather';
 
 class MainSection extends Component {
 
   renderMarta() {
     return (
-      <MartaContainer/>
+      <div>
+        <MartaContainer/>
+        <WeatherContainer/>
+      </div>
     );
   }
 
