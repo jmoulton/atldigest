@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 
 class WeatherContainer extends Component {
   render() {
@@ -11,11 +11,25 @@ class WeatherContainer extends Component {
 }
 
 class WeatherFetch extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDetails: false,
+      weather: {}
+    };
+  }
+
   render() {
-    this.fetchWeatherData();
+    if (this.state.showDetails === false) {
+      this.fetchWeatherData();
+    }
 
     return (
-      <weatherDetails/>
+      <div className="weather-details">
+        {this.state.showDetails ?
+          <WeatherDetails weatherObj={this.state.weather}/> : null
+        }
+      </div>
     );
   }
 
@@ -24,13 +38,30 @@ class WeatherFetch extends Component {
       .then(response => {
         return (response.json());
       }).then(json => {
-        console.log(json);
-        return (json);
+        this.setState({weather: json.current_observation, showDetails: true});
       }).catch(ex => {
         console.log('parsing failed', ex);
         return (ex);
       });
   }
 }
+
+class WeatherDetails extends Component {
+
+  render() {
+    const weather = this.props.weatherObj;
+    console.log(weather);
+    return (
+      <div className="weather">
+        <h4>Current Weather</h4>
+        <h1>{weather.temp_f}</h1>
+      </div>
+    );
+  }
+}
+
+WeatherDetails.propTypes = {
+  weatherObj: PropTypes.object.isRequired
+};
 
 export default WeatherContainer;
